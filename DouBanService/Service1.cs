@@ -5,6 +5,7 @@ using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,9 +32,20 @@ namespace DouBanService
 
         void timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            using (StreamWriter sw1 = new StreamWriter(@"C:\test.txt", true))
+            //using (StreamWriter sw1 = new StreamWriter(@"C:\test.txt", true))
+
+            //不指定路径，默认路径在c:\windows\system32路径下
+            using (StreamWriter sw1 = new StreamWriter("test.txt", true))
             {
                 sw1.WriteLine(sw.Elapsed.ToString());
+
+                Assembly myAssembly = Assembly.GetEntryAssembly();
+                string path = myAssembly.Location;
+                sw1.WriteLine(path);
+
+                DirectoryInfo dr = new DirectoryInfo(path);
+                path = dr.Parent.ToString();  //当前目录的上一级目录
+                sw1.WriteLine(path);
             }
         }
 
